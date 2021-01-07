@@ -9,36 +9,8 @@ interface Props {
 }
 
 export default class SiteItem extends React.Component<Props> {
-  private badge = React.createRef<HTMLImageElement>()
-  private imgInterval?: any
-
-  componentDidMount() {
-    this.imgInterval = window.setInterval(() => {
-      this.updateImage()
-    }, 10000)
-  }
-
-  componentWillUnmount() {
-    window.clearInterval(this.imgInterval)
-  }
-
   handleDeployButtonClicked = (_: MouseEvent) => {
     this.props.onDeploy(this.props.site)
-    setTimeout(() => {
-      this.updateImage()
-    }, 1000)
-  }
-
-  private getImageUrl() {
-    const { site } = this.props
-    return `https://api.netlify.com/api/v1/badges/${site.id}/deploy-status`
-  }
-
-  private updateImage() {
-    const image = this.badge && this.badge.current
-    if (image) {
-      image.src = `${this.getImageUrl()}?${new Date().getTime()}`
-    }
   }
 
   private renderLinks() {
@@ -73,9 +45,6 @@ export default class SiteItem extends React.Component<Props> {
             {site.title}
             {this.renderLinks()}
           </h4>
-          <div>
-            <img src={this.getImageUrl()} ref={this.badge} />
-          </div>
         </div>
         {site.buildHookId && (
           <div className={styles.actions}>
